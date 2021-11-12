@@ -69,9 +69,7 @@ body {
     margin-top: 94px;
     margin-bottom: 7px;
 }
-.escondido {
-    display: none;
-}
+
 
 header {
     display: flex;
@@ -134,14 +132,14 @@ nav ion-icon {
 }
 .bate-papo {
     margin-top: 106px;
+    margin-bottom: 90px;
 }
+
 time{
     color: #AAAAAA;
     
 }
-.mensagem-privada, 
-.mensagem-status,
-.mensagem-todos {
+.mensagem {
     width: 375px;
     
 
@@ -154,18 +152,24 @@ time{
     
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     
 }
 p {
     margin: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-.mensagem-privada {
+.privada {
     background-color: #FFDEDE;
 }
-.mensagem-status {
+.status {
     background-color: #DCDCDC;
 }
-.mensagem-todos {
+.todos {
     background-color: #FFFFFF;
+}
+span {
+    font-weight: 700;
 }
 
