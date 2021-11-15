@@ -1,6 +1,9 @@
 let nome;
 let tipoSelecionado = 0;
 let participanteSelecionado = 0;
+let nomeUsuario = "Todos"
+let privacidade = "message";
+let tipoMensagem = "publicamente"
 
 function carregarPage() {
     const conteúdo = document.querySelector("body")
@@ -24,7 +27,10 @@ function carregarPage() {
         </header>
         <section class="bate-papo"> </section>
         <nav class = "enviar-mensagem">
-            <input type="text" name="" id="" placeholder="Escreva aqui...">
+            <div class ="digitar-mensagem">
+                <input type="text" name="" id="" placeholder="Escreva aqui...">
+                <p class ='informacoes-mensagem'> Enviando para ${nomeUsuario} (${tipoMensagem})</p>
+            </div>
             <ion-icon name="paper-plane-outline" data-identifier="send-message" onclick="enviarMensagem()"></ion-icon>
         </nav>
 
@@ -41,14 +47,14 @@ function carregarPage() {
             Escolha a visibilidade:
         </p>
         <div class="visibilidade-mensagem">
-            <div class="opcoes" onclick ="checkTipo(this)">
+            <div class="opcoes publico" onclick ="checkTipo(this)" data-identifier="visibility">
                 <ion-icon name="lock-open"></ion-icon>
                 Público
                 <div class = "check"> 
                     <ion-icon name="checkmark-sharp"></ion-icon>
                 </div>
             </div>
-            <div class="opcoes" onclick = "checkTipo(this)">
+            <div class="opcoes reservado" onclick = "checkTipo(this)" data-identifier="visibility">
                 <ion-icon name="lock-closed"></ion-icon>
                 Reservadamente
                 <div class = "check"> 
@@ -59,33 +65,32 @@ function carregarPage() {
 
     </nav>
    `
-    
+
 }
 function entradaDoUsuario() {
     const inputEntrada = document.querySelector(".entrada input")
-    nome = inputEntrada.value
-    
-    
-    if (nome !== ""){
-        const promessa = axios.post ("https://mock-api.driven.com.br/api/v4/uol/participants", {name: nome} )
+    nome = inputEntrada.value;
+
+    if (nome !== "") {
+        const promessa = axios.post("https://mock-api.driven.com.br/api/v4/uol/participants", { name: nome })
         promessa.then(entrando)
         promessa.catch(() => alert("Este nome já está em uso"), carregarPage())
-        return ;
+        return;
     }
     alert("Por favor, digite um nome válido!")
-    
+
 }
 function entrando(resposta) {
     const entrada = document.querySelector(".entrada")
     const carregando = document.querySelector(".carregando")
     entrada.classList.add("escondido")
     carregando.classList.remove("escondido")
-    
-    const idManterConexao= setInterval (manterConexao,5000)
-    const idPegandoMensagens = setInterval(pegandoMensagens,3000);
+
+    const idManterConexao = setInterval(manterConexao, 5000)
+    const idPegandoMensagens = setInterval(pegandoMensagens, 3000);
+    setTimeout(() => carregando.classList.add("escondido"), 3000)
+    buscarPartipantesAtivos()
     const idBuscarParticipantes = setInterval(buscarPartipantesAtivos, 10000)
-    setTimeout (() => carregando.classList.add("escondido"), 3000)
-    
 }
 function pegandoMensagens() {
     const promessa = axios.get("https://mock-api.driven.com.br/api/v4/uol/messages");
@@ -94,15 +99,15 @@ function pegandoMensagens() {
 
 function gerarMensagens(resposta) {
     const secaoPrincipal = document.querySelector(".secao-principal")
-    if (secaoPrincipal.classList.contains("escondido")){
-        secaoPrincipal.classList.remove ("escondido")
+    if (secaoPrincipal.classList.contains("escondido")) {
+        secaoPrincipal.classList.remove("escondido")
     }
 
     const enderecoBatePapo = document.querySelector(".bate-papo")
     enderecoBatePapo.innerHTML = ""
 
     const data = resposta.data;
-     
+
     for (let i = 0; i < data.length; i++) {
         let from = data[i].from
         let to = data[i].to
@@ -113,55 +118,60 @@ function gerarMensagens(resposta) {
         if (type === "status") {
             enderecoBatePapo.innerHTML += `<article class="mensagem status" data-identifier="message">
             <p class = "texto"> <time>(${time})</time> <span> ${from} </span>  ${text}</p> 
-         </article>`
+            </article>`
         }
-        if (type === "private_message" && to === nome) {
+        if (type === "private_message" && (to === nome || from === nome)) {
             enderecoBatePapo.innerHTML += `<article class="mensagem privada" data-identifier="message">
             <p class = "texto"> <time>(${time})</time> <span> ${from} </span> reservadamente para <span> ${to} </span>:  ${text} </p>
-         </article>`
+            </article>`
         }
         if (type === "message") {
             enderecoBatePapo.innerHTML += ` <article class="mensagem todos" data-identifier="message">
             <p class = "texto"><time>(${time})</time> <span> ${from} </span> para <span> ${to} </span>:   ${text} </p>
-        </article>`
+            </article>`
 
         }
-        
+
     }
 
     const mensagens = document.querySelectorAll(".mensagem")
-    const ultimaMensagem = mensagens[mensagens.length -1] 
+    const ultimaMensagem = mensagens[mensagens.length - 1]
     ultimaMensagem.scrollIntoView()
-    
+
 }
 
 function manterConexao() {
-    const promessa = axios.post ("https://mock-api.driven.com.br/api/v4/uol/status", {name: nome} )
+    const promessa = axios.post("https://mock-api.driven.com.br/api/v4/uol/status", { name: nome })
     promessa.catch(manterConexao)
 }
 
 function enviarMensagem() {
     const inputMensagem = document.querySelector(".enviar-mensagem input")
     const mensagem = inputMensagem.value
-    const objetoMensagem = {from: nome, to: "Todos", text: mensagem, type: "message"}
+    const objetoMensagem = {
+        from: nome,
+        to: nomeUsuario,
+        text: mensagem,
+        type: privacidade
+    }
 
     promessa = axios.post("https://mock-api.driven.com.br/api/v4/uol/messages", objetoMensagem)
-    
+
     promessa.then(pegandoMensagens)
     promessa.catch(() => window.location.reload(true))
+    inputMensagem.value = "";
 }
 function participantesAtivos() {
     const endereçoAtivos = document.querySelector(".ativos")
     const enderecoInformacoes = document.querySelector(".informacoes")
 
-    if (endereçoAtivos.classList.contains("escondido")){
+    if (endereçoAtivos.classList.contains("escondido")) {
         endereçoAtivos.classList.remove("escondido")
         enderecoInformacoes.classList.remove("escondido")
     } else {
         endereçoAtivos.classList.add("escondido")
         enderecoInformacoes.classList.add("escondido")
     }
-    
 }
 function buscarPartipantesAtivos() {
     const promessa = axios.get("https://mock-api.driven.com.br/api/v4/uol/participants")
@@ -171,43 +181,64 @@ function gerarParticipantes(resposta) {
     const participantes = document.querySelector(".participantes")
     const data = resposta.data
     participantes.innerHTML = `
-    <div class="usuario" onclick = "checkUsuario(this)">
-        <ion-icon name="people-sharp"></ion-icon>
-        Todos
+    <div class="usuario " onclick = "checkUsuario(this)">
+    <ion-icon name="people-sharp"></ion-icon>
+        <p> Todos </p>
         <div class = "check"> 
             <ion-icon name="checkmark-sharp"></ion-icon>
         </div>
     </div>`
     for (let i = 0; i < data.length; i++) {
-        participantes.innerHTML += `
-                <div class="usuario" onclick = "checkUsuario(this)">
+        if (data[i].name !== nome) {
+            participantes.innerHTML += `
+                <div class="usuario" onclick = "checkUsuario(this)" data-identifier="participant">
                     <ion-icon name="person-circle-sharp"></ion-icon>
                     <p>${data[i].name}</p>
                     <div class = "check"> 
                         <ion-icon name="checkmark-sharp"></ion-icon>
                     </div>
                 </div>`
+        }
     }
 }
 function checkUsuario(item) {
     const selecionadoUsuario = document.querySelector(".participantes .selecionado")
-    
+
     if (selecionadoUsuario !== null) {
         selecionadoUsuario.classList.remove("selecionado")
     }
-    
+
     item.classList.add("selecionado")
-    
+
+    const paragrafo = item.querySelector("p")
+    nomeUsuario = paragrafo.innerHTML;
+
+    const digitar = document.querySelector(".digitar-mensagem .informacoes-mensagem")
+    digitar.innerHTML = `Enviando para ${nomeUsuario} (${tipoMensagem})`
+
 }
 function checkTipo(item) {
     const selecionadoOpcoes = document.querySelector(".visibilidade-mensagem .selecionado")
-    
+
     if (selecionadoOpcoes !== null) {
-        selecionadoOpcoes.classList.remove ("selecionado")
-       
+        selecionadoOpcoes.classList.remove("selecionado")
+
     }
 
     item.classList.add("selecionado")
+
+    if (item.classList.contains('publico')) {
+        privacidade = "message"
+        tipoMensagem = "publicamente"
+
+    }
+    if (item.classList.contains('reservado')) {
+        privacidade = "private_message"
+        tipoMensagem = "reservadamente"
+    }
+
+    const digitar = document.querySelector(".digitar-mensagem .informacoes-mensagem")
+    digitar.innerHTML = `Enviando para ${nomeUsuario} (${tipoMensagem})`
 }
 
 carregarPage()

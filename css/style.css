@@ -1,7 +1,6 @@
 body {
     font-family: 'Roboto', sans-serif;
 }
-
 .entrada {
     max-width: 375px;
 
@@ -11,14 +10,12 @@ body {
 
     margin: 0 auto;
 }
-
 .entrada img,
 .carregando img {
     margin-top: 72px;
     width: 130px;
     height: 92px;
 }
-
 .entrada input {
     width: 260px;
     height: 54px;
@@ -61,7 +58,6 @@ body {
     align-items: center;
 
     margin: 0 auto;
-
 }
 
 .carregando #gif{
@@ -71,14 +67,19 @@ body {
     margin-top: 94px;
     margin-bottom: 7px;
 }
+.secao-principal {
+    max-width: 500px;
 
+    margin: 0 auto;
+    
+}
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 
     height: 80px;
-    width: 375px;
+    width: 100%;
 
     background-color: #FFFFFF;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
@@ -102,11 +103,12 @@ header ion-icon {
 
 .enviar-mensagem {
     height: 80px;
-    width: 375px;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
 
+    color: #000000;
     background-color: #FFFFFF;
     box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.05);
 
@@ -115,38 +117,47 @@ header ion-icon {
     left: 0;
 }
 
-.enviar-mensagem input {
+.digitar-mensagem {
+    margin-left: 20px;
+}
+
+.digitar-mensagem input {
     font-size: 18px;
     font-style: italic;
     font-weight: 400;
     line-height: 21px;
     letter-spacing: 0em;
     text-align: left;
-    color: #000000;
+    
 
     border: none;
-
-    margin-left: 20px;
-    height: 45px;
-    width: 300px;
+    height: 25px;
+    width: 250px;
 }
 .enviar-mensagem ion-icon {
     font-size: 25px;
     margin-right: 20px;
 }
+
+.informacoes-mensagem {
+    
+    font-size: 14px;
+    line-height: 25px;
+    font-weight: 300;
+}
+
 .bate-papo {
     margin-top: 106px;
     margin-bottom: 90px;
     background-color: #F3F3F3;
 }
 
-time{
+time {
     color: #AAAAAA;
 }
 
 .mensagem {
-    width: 375px;
-    
+    width: 100%;
 
     font-size: 14px;
     line-height: 20px;
@@ -154,11 +165,9 @@ time{
     margin-bottom: 4px;
     border-radius: 2px;
 
-    
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    
 }
 
 .privada {
@@ -170,20 +179,18 @@ time{
 .todos {
     background-color: #FFFFFF;
 }
-
 .texto {
     margin: 8px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
 span {
     font-weight: 700;
 }
 
 
 .ativos {
-    width: 375px;
+    width: 100%;
     height: 100%;
 
     position: fixed;
@@ -200,7 +207,7 @@ span {
     height: 100%;
 
     position: fixed;
-    left: 116px;
+    right: 0;
     top: 0;
     
     display: flex;
@@ -223,7 +230,6 @@ span {
     text-align: center;
     
     margin-bottom: 8px;
-    
 }
 
 .participantes, .visibilidade-mensagem {
