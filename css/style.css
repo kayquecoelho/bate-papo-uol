@@ -71,7 +71,6 @@ body {
     max-width: 500px;
 
     margin: 0 auto;
-    
 }
 header {
     display: flex;
@@ -128,7 +127,6 @@ header ion-icon {
     line-height: 21px;
     letter-spacing: 0em;
     text-align: left;
-    
 
     border: none;
     height: 25px;
@@ -140,7 +138,6 @@ header ion-icon {
 }
 
 .informacoes-mensagem {
-    
     font-size: 14px;
     line-height: 25px;
     font-weight: 300;
@@ -188,7 +185,6 @@ span {
     font-weight: 700;
 }
 
-
 .ativos {
     width: 100%;
     height: 100%;
@@ -196,10 +192,9 @@ span {
     position: fixed;
     top: 0;
     left: 0;
-    
-    background-color:  rgba(0, 0, 0, 0.6);
     z-index: 2;
     
+    background-color:  rgba(0, 0, 0, 0.6);
 }
 
 .informacoes {
@@ -214,7 +209,6 @@ span {
     flex-direction: column;
     background-color: #FFFFFF;
     z-index: 3;
-    
 }
 
 #título, #visibilidade {

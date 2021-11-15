@@ -66,6 +66,14 @@ function carregarPage() {
     </nav>
    `
 
+    const inputMensagem = document.querySelector(".enviar-mensagem input")
+    inputMensagem.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            document.querySelector(".enviar-mensagem ion-icon").click();
+        }
+    })
+
 }
 function entradaDoUsuario() {
     const inputEntrada = document.querySelector(".entrada input")
@@ -155,12 +163,15 @@ function enviarMensagem() {
         type: privacidade
     }
 
+    if (mensagem !== ""){
     promessa = axios.post("https://mock-api.driven.com.br/api/v4/uol/messages", objetoMensagem)
 
     promessa.then(pegandoMensagens)
     promessa.catch(() => window.location.reload(true))
+    }
     inputMensagem.value = "";
 }
+
 function participantesAtivos() {
     const endereçoAtivos = document.querySelector(".ativos")
     const enderecoInformacoes = document.querySelector(".informacoes")
@@ -173,10 +184,12 @@ function participantesAtivos() {
         enderecoInformacoes.classList.add("escondido")
     }
 }
+
 function buscarPartipantesAtivos() {
     const promessa = axios.get("https://mock-api.driven.com.br/api/v4/uol/participants")
     promessa.then(gerarParticipantes)
 }
+
 function gerarParticipantes(resposta) {
     const participantes = document.querySelector(".participantes")
     const data = resposta.data
@@ -201,6 +214,7 @@ function gerarParticipantes(resposta) {
         }
     }
 }
+
 function checkUsuario(item) {
     const selecionadoUsuario = document.querySelector(".participantes .selecionado")
 
@@ -217,6 +231,7 @@ function checkUsuario(item) {
     digitar.innerHTML = `Enviando para ${nomeUsuario} (${tipoMensagem})`
 
 }
+
 function checkTipo(item) {
     const selecionadoOpcoes = document.querySelector(".visibilidade-mensagem .selecionado")
 
@@ -232,7 +247,7 @@ function checkTipo(item) {
         tipoMensagem = "publicamente"
 
     }
-    if (item.classList.contains('reservado')) {
+    if (item.classList.contains('reservado') && nomeUsuario !== "Todos") {
         privacidade = "private_message"
         tipoMensagem = "reservadamente"
     }
@@ -242,5 +257,3 @@ function checkTipo(item) {
 }
 
 carregarPage()
-
-
